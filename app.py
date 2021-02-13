@@ -1,10 +1,9 @@
 import os
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk, Menu, Text
+from tkinter import ttk
 import sqlite3
 from database import DB
-
 
 
 # https://colorhunt.co/palette/225739
@@ -39,36 +38,100 @@ class Main(tk.Frame):
     def open_dialog(self):
         Dialog()
 
+    def admin_menu(self):
+        AdminPanel()
+        print('efefeff')
+
     def avtorize(self, login, pas):
         conn = sqlite3.connect('manager.db')
         c = conn.cursor()
-        x = c.execute('''SELECT name FROM users
+        name_user = c.execute('''SELECT name FROM users
                     WHERE login =?''', (login,))
-        x = str(x.fetchall())
+        name_user.fetchall()
 
-        y = c.execute('''SELECT name FROM users
+        name_pas = c.execute('''SELECT name FROM users
                     WHERE pas =?''', (pas,))
-        y = str(y.fetchall())
-        if x != y:
+        name_pas.fetchall()
+        if name_user != name_pas:
             print(0)
 
         else:
             c = c.execute('''SELECT role FROM users
                         WHERE login =?''', (login,))
             c = str(c.fetchall())
+
             print(c)
             if c == "[('admin',)]":
                 print(1)
+                self.admin_menu()
                 # os.system('python main.py')
             else:
                 # os.system('python main_1.py')
                 print(2)
 
 
-class Dialog(tk.Toplevel):
+class AdminPanel(tk.Frame):
+    def __init__(self):
+        super().__init__()
+        self.init_main()
+        self.db = db
+
+    def init_main(self):
+        self.master = Tk()
+        self.master.wm_state('zoomed')
+        self.master.attributes("-topmost", True)
+        self.master.geometry("450x350+300+300")
+        self.master.title("Простое меню")
+        self.master.config(bg="#e7e7de")
+
+        menubar = Menu(self.master)
+        self.master.config(menu=menubar)
+
+        file_menu = Menu(menubar, tearoff=0)
+        search_menu = Menu(menubar, tearoff=0)
+        print_menu = Menu(menubar, tearoff=0)
+        # file_menu.add_command(label="Выход")
+        # menubar.add_cascade(label="Файл", menu=file_menu)
+
+        search_menu.add_command(label="Поиск по задаче" #command=self.search_tasks
+                                 )
+        search_menu.add_command(label="Поиск по категории" #command=self.search_category
+                                 )
+        search_menu.add_command(label="Поиск по ответсвенному" # command=self.search_user
+                                 )
+
+        file_menu.add_command(label="Добавить категорию" #command=self.add_category
+                              )  # command=self.add_rack
+        file_menu.add_command(label="Добавить пользователя" #command=self.add_user
+                               )  # command=self.add_provider
+        file_menu.add_command(label="Добавить задачу" #command=self.add_task
+                               )  # command=self.open_dialog
+        file_menu.add_command(label="Показать пользователей"#command=self.list_users
+                               )
+
+        print_menu.add_command(label="Печать задач" # command=self.print_data
+                                )
+        print_menu.add_command(label="Печать пользователей" #command=self.print_users
+                                )
+
+        menubar.add_cascade(label="Фаил", menu=file_menu)
+        menubar.add_cascade(label="Поиск", menu=search_menu)
+        menubar.add_command(label="Помощь" #command=self.open_help_dialog
+                             )
+        menubar.add_cascade(label="Печать", menu=print_menu)
+        menubar.add_command(label="Обновить" #command=self.view_records
+                             )
+        frame_1 = LabelFrame(self.master, text="Верх", bg="#ffffff")
+        frame_1.pack(side=RIGHT, expand=1, fill=Y)
+        label_password = tk.Label(frame_1, text="пароль:", bg="#e7e7de", font='Times 15')
+        label_password.pack(side=TOP, padx=5, pady=1)
+        self.master.mainloop()
+
+
+class Dialog(tk.Frame):
 
     def __init__(self):
-        super().__init__(root)
+        super().__init__()
         # self.init_listusers()
         self.view = app
         # self.db = db
@@ -135,7 +198,7 @@ class Dialog(tk.Toplevel):
         btn_ok.bind('<Button-1>', lambda event: self.view.avtorize(entry_login.get(),
                                                                    entry_password.get()))
 
-        #self.btn_ok.bind('<Button-1>', lambda event: self.destroy(), add='+')
+        # btn_ok.bind('<Button-1>', lambda event: self.destroy())
 
         ak.mainloop()
 
@@ -143,6 +206,7 @@ class Dialog(tk.Toplevel):
 if __name__ == "__main__":
     """Запуск приложения"""
     db = DB()
+
     root = tk.Tk()
     poetry = "Добро пожаловать в TASK MANAGER\n" \
              "Время — это то, чего мы хотим больше всего и то,\n " \

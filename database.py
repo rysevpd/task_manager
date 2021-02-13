@@ -40,6 +40,12 @@ class DB:
             address text)''')
         self.conn.commit()
 
+        self.c.execute(
+            '''INSERT OR IGNORE INTO users(
+            name, login, pas, role, post, number, address)
+            VALUES ('admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin')''')
+        self.conn.commit()
+
 
         self.c.execute(
             '''CREATE TABLE IF NOT EXISTS tasks(
