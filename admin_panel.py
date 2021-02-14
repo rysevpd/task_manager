@@ -7,6 +7,7 @@ from database import DB
 
 
 class AdminPanel(tk.Frame):
+
     def __init__(self, master):
         super().__init__(master)
         self.init_main()
@@ -36,9 +37,10 @@ class AdminPanel(tk.Frame):
         menubar.add_cascade(label="Поиск", menu=search_menu)
         menubar.add_command(label="Помощь", command=self.open_help_dialog)
         menubar.add_cascade(label="Печать", menu=print_menu)
-        menubar.add_command(label="Обновить", command=self.view_records)
+        # menubar.add_command(label="Обновить", command=self.view_records)
 
-        frame_1 = LabelFrame(self.master, text="Управление", bg="#3d394d")
+        frame_1 = LabelFrame(self.master, text="Управление", bg="#3d394d", fg="#ffb26b",
+                             font="Times 15")
         frame_1.pack(side=RIGHT, padx=2, fill=Y)
 
         update_data = tk.Button(frame_1,
@@ -46,33 +48,42 @@ class AdminPanel(tk.Frame):
                                 bg="#403c4a",
                                 # bd=2,
                                 font='Times 15'  # command=self.open_update_dialog
-        )
+                                )
         update_data.pack(side=TOP, padx=5, pady=5)
 
         del_data = tk.Button(frame_1,
                              text='     Удалить     ',
-                             bg="#845ec2",
+                             bg="#403c4a",
                              bd=2,
                              font='Times 15')
         del_data.pack(side=TOP, padx=5, pady=5)
 
         del_data = tk.Button(frame_1,
                              text='     Обновить   ',
-                             bg="#845ec2",
+                             bg="#403c4a",
                              bd=2,
                              font='Times 15')
         del_data.pack(side=TOP, padx=5, pady=5)
 
         programmer = tk.Button(frame_1,
                                text='О разработчике',
-                               bg="#845ec2",
+                               bg="#403c4a",
                                bd=2,
                                font='Times 15')
         programmer.pack(side=TOP, padx=5, pady=5)
 
+        poetry = "Не задерживайтесь\n" \
+                 "в прошлом, не мечтайте\n" \
+                 "о будущем, сосредоточьте\n " \
+                 "разум на настоящем.\n" \
+                 "© Будда"
+        label2 = tk.Label(frame_1, text=poetry,
+                          bg="#3d394d", fg="#ffb26b")
+        label2.pack(side=TOP)
+
         exit_program = tk.Button(frame_1,
                                  text='      Выход      ',
-                                 bg="#845ec2",
+                                 bg="#ef4f4f",
                                  bd=2,
                                  font='Times 15', command=master.quit)
         exit_program.pack(side=BOTTOM, padx=5, pady=5)
@@ -80,20 +91,24 @@ class AdminPanel(tk.Frame):
         style = ttk.Style()
         style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
                         font=('Calibri', 11), foreground="#008891")  # Modify the font of the body
-        style.configure("mystyle.Treeview.Heading", font=('Calibri', 13, 'bold'), bg="#008891")  # Modify the font of the headings
+        style.configure("mystyle.Treeview.Heading", font=('Calibri', 13, 'bold'),
+                        bg="#008891")  # Modify the font of the headings
         style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])  # Remove the borders)
 
         """Виджет tree - наша таблица"""
         frame_2 = LabelFrame(self.master,
-                             text="Управление",
-                             bg="#008891")
+                             text="Задачи",
+                             bg="#3d394d",
+                             fg="#ffb26b",
+                             font="Times 15")
         frame_2.pack(side=LEFT, fill=BOTH)
         self.tree = ttk.Treeview(frame_2,
                                  style="mystyle.Treeview",
-                                 columns=('task', 'category', 'status', 'responsible', 'date_start', 'date_end'),
+                                 columns=('ID', 'task', 'category', 'status', 'responsible', 'date_start', 'date_end'),
                                  height=20,
                                  show='headings')
 
+        self.tree.column('ID', width=30, anchor=tk.CENTER)
         self.tree.column('task', anchor=tk.CENTER)
         self.tree.column('category', anchor=tk.CENTER)
         self.tree.column('status', anchor=tk.CENTER)
@@ -101,6 +116,7 @@ class AdminPanel(tk.Frame):
         self.tree.column('date_start', anchor=tk.CENTER)
         self.tree.column('date_end', anchor=tk.CENTER)
 
+        self.tree.heading('ID', text='ID')
         self.tree.heading('task', text='Задча')
         self.tree.heading('category', text='Категория')
         self.tree.heading('status', text='Статус')
@@ -210,7 +226,7 @@ class ListUsers(tk.Toplevel):
         self.view_users()
 
     def init_list_users(self):
-        self.title('Сотруники')
+        self.title('Сотрудники')
         self.geometry("950x450+300+200")
         self.resizable(False, False)
 
@@ -266,9 +282,128 @@ class AddUser(tk.Toplevel):
 
     def init_user(self):
         self.title('Добавить сотрудника')
-        self.geometry('400x420+400+300')
+        self.geometry('400x400+400+100')
         self.resizable(False, False)
 
+        frame_1 = Frame(self, bg="#e7e7de")
+        frame_1.pack(fill=X)
+        label_user = tk.Label(frame_1,
+                                  text='ФИО сотрудника:',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_user.pack(side=LEFT, padx=5, pady=5)
+
+        entry_user = Entry(frame_1, justify="right")
+        entry_user.pack(fill=X, padx=5, expand=True)
+
+        frame_2 = Frame(self, bg="#e7e7de")
+        frame_2.pack(fill=X)
+        label_login = tk.Label(frame_2,
+                                  text='Логин:                   ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_login.pack(side=LEFT, padx=5, pady=5)
+
+        # entry_login = Entry(frame_2, justify="right")
+        entry_login = Entry(frame_2, justify="right")
+        entry_login.pack(fill=X, padx=5, expand=True)
+
+        frame_3 = Frame(self, bg="#e7e7de")
+        frame_3.pack(fill=X)
+        label_pas = tk.Label(frame_3,
+                                  text='Пароль:                 ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_pas.pack(side=LEFT, padx=5, pady=5)
+
+        entry_pas = Entry(frame_3, justify="right")
+        entry_pas.pack(fill=X, padx=5, expand=True)
+
+        frame_4 = Frame(self, bg="#e7e7de")
+        frame_4.pack(fill=X)
+        label_role = tk.Label(frame_4,
+                                  text='Роль:                     ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_role.pack(side=LEFT, padx=5, pady=5)
+
+        entry_role = ttk.Combobox(frame_4, values=[u'admin', u'user'])
+        entry_role.current(0)
+        entry_role.pack(fill=X, padx=5, expand=True)
+
+        frame_5 = Frame(self, bg="#e7e7de")
+        frame_5.pack(fill=X)
+        label_post = tk.Label(frame_5,
+                                  text='Должность:          ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_post.pack(side=LEFT, padx=5, pady=5)
+
+        entry_post = Entry(frame_5, justify="right")
+        entry_post.pack(fill=X, padx=5, expand=True)
+
+        frame_6 = Frame(self, bg="#e7e7de")
+        frame_6.pack(fill=X)
+        label_number = tk.Label(frame_6,
+                                  text='Номер телефона: ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_number.pack(side=LEFT, padx=5, pady=5)
+
+        entry_number = Entry(frame_6, justify="right")
+        entry_number.pack(fill=X, padx=5, expand=True)
+
+        frame_7 = Frame(self, bg="#e7e7de")
+        frame_7.pack(fill=X)
+
+        label_address = tk.Label(frame_7,
+                                  text='Адрес:                   ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_address.pack(side=LEFT, padx=5, pady=5)
+
+        entry_address = Entry(frame_7, justify="right")
+        entry_address.pack(fill=X, padx=5, expand=True)
+
+        frame_8 = Frame(self, bg="#e7e7de")
+        frame_8.pack(fill=X)
+
+        btn_cancel = tk.Button(frame_8,
+                               bg='#00587a',
+                               fg='#ffffff',
+                               text=' ЗАКРЫТЬ ',
+                               compound=tk.TOP,
+                               font='Times 13',
+                               command=self.destroy,
+                               width=20)
+        btn_cancel.pack(side=RIGHT, padx=5, pady=5)
+
+        self.btn_ok = tk.Button(frame_8,
+                                bg='#00587a',
+                                fg='#ffffff',
+                                text='ДОБАВИТЬ',
+                                compound=tk.TOP,
+                                font='Times 13',
+                                width=20)
+
+        self.btn_ok.pack(side=LEFT, padx=5, pady=5)
+        self.btn_ok.bind('<Button-1>', lambda event: self.view.records(entry_user.get(),
+                                                                       entry_login.get(),
+                                                                       entry_pas.get(),
+                                                                       entry_role.get(),
+                                                                       entry_post.get(),
+                                                                       entry_number.get(),
+                                                                       entry_address.get()))
+
+        self.grab_set()
+        self.focus_set()
+
+        frame_9 = Frame(self, bg="#e7e7de")
+        frame_9.pack(fill=X)
+
+
+
+        """
         label_user = tk.Label(self, text='Сотрудник:')
         label_user.place(x=50, y=50)
         label_login = tk.Label(self, text='Логин:')
@@ -300,7 +435,8 @@ class AddUser(tk.Toplevel):
         self.entry_role = ttk.Combobox(self, values=[u'admin', u'user'])
         self.entry_role.current(0)
         self.entry_role.place(x=200, y=125)
-
+        """
+        """
         btn_cancel = ttk.Button(self, text='Закрыть', command=self.destroy)
         btn_cancel.place(x=300, y=225)
 
@@ -317,7 +453,7 @@ class AddUser(tk.Toplevel):
 
         self.grab_set()
         self.focus_set()
-
+        """
 
 class Category(tk.Toplevel):
     """Окно добавления категории"""
@@ -329,24 +465,53 @@ class Category(tk.Toplevel):
 
     def init_category(self):
         self.title('Добавить категорию')
-        self.geometry('400x220+400+300')
+        self.geometry('400x120+400+100')
         self.resizable(False, False)
+        frame_1 = Frame(self, bg="#e7e7de")
+        frame_1.pack(fill=X)
 
-        label_category = tk.Label(self, text='Название категории:')
-        label_category.place(x=50, y=50)
+        label_category = tk.Label(frame_1,
+                                  text='Название категории:',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_category.pack(side=LEFT, padx=5, pady=5)
 
-        self.entry_category = ttk.Entry(self)
-        self.entry_category.place(x=200, y=50)
+        entry_login = Entry(frame_1, justify="right")
+        entry_login.pack(fill=X, padx=5, expand=True)
 
-        btn_cancel = ttk.Button(self, text='Закрыть', command=self.destroy)
-        btn_cancel.place(x=300, y=170)
+        frame_2 = Frame(self, bg="#e7e7de")
+        frame_2.pack(fill=X)
 
-        self.btn_ok = ttk.Button(self, text='Добавить')
-        self.btn_ok.place(x=220, y=170)
-        self.btn_ok.bind('<Button-1>', lambda event: self.view.record_category(self.entry_category.get()))
+        btn_cancel = tk.Button(frame_2,
+                               bg='#00587a',
+                               fg='#ffffff',
+                               text=' ЗАКРЫТЬ ',
+                               compound=tk.TOP,
+                               font='Times 13',
+                               command=self.destroy,
+                               width=20)
+        btn_cancel.pack(side=RIGHT, padx=5, pady=5)
+
+        btn_ok = tk.Button(frame_2,
+                           bg='#00587a',
+                           fg='#ffffff',
+                           text=' ВХОД ',
+                           compound=tk.TOP,
+                           font='Times 13',
+                           width=20)
+        btn_ok.pack(side=LEFT, padx=5, pady=5)
+        btn_ok.bind('<Button-1>', lambda event: self.view.record_category(self.entry_category.get()))
 
         self.grab_set()
         self.focus_set()
+
+        frame_3 = Frame(self, bg="#e7e7de")
+        frame_3.pack(fill=X)
+
+        poetry = "Плох тот план, который нельзя изменить\n" \
+                 "© Публилий Сир"
+        label = tk.Label(frame_3, text=poetry, bg="#e7e7de")
+        label.pack(side=BOTTOM, padx=2, pady=1)
 
 
 class Task(tk.Toplevel):
@@ -359,58 +524,121 @@ class Task(tk.Toplevel):
 
     def init_child(self):
         self.title('Добавить задачу')
-        self.geometry('400x420+400+300')
+        self.geometry('400x420+400+100')
         self.resizable(False, False)
 
-        label_task = tk.Label(self, text='Задача:')
-        label_task.place(x=50, y=50)
-        label_category = tk.Label(self, text='Категория:')
-        label_category.place(x=50, y=75)
-        label_status = tk.Label(self, text='Статус:')
-        label_status.place(x=50, y=100)
-        label_responsible = tk.Label(self, text='Ответственный:')
-        label_responsible.place(x=50, y=125)
-        label_date_start = tk.Label(self, text='Старт задачи:')
-        label_date_start.place(x=50, y=150)
-        label_date_end = tk.Label(self, text='Срок до:')
-        label_date_end.place(x=50, y=175)
+        frame_1 = Frame(self, bg="#e7e7de")
+        frame_1.pack(fill=X)
+        label_task = tk.Label(frame_1,
+                                  text='Задача:               ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_task.pack(side=LEFT, padx=5, pady=5)
 
-        self.entry_task = ttk.Entry(self)
-        self.entry_task.place(x=200, y=50)
-        self.entry_category = ttk.Entry(self)
-        self.entry_category.place(x=200, y=75)
+        entry_task = Entry(frame_1, justify="right")
+        entry_task.pack(fill=X, padx=5, expand=True)
 
-        self.entry_status = ttk.Combobox(self, values=[u'TODO', u'in progress', u'suspended', u'DONE'])
-        self.entry_status.current(0)
-        self.entry_status.place(x=200, y=100)
+        frame_2 = Frame(self, bg="#e7e7de")
+        frame_2.pack(fill=X)
+        label_category = tk.Label(frame_2,
+                                  text='Категория:         ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_category.pack(side=LEFT, padx=5, pady=5)
 
-        self.entry_responsible = ttk.Entry(self)
-        self.entry_responsible.place(x=200, y=125)
+        # entry_login = Entry(frame_2, justify="right")
+        entry_category = ttk.Combobox(frame_2, values=[u'TODO', u'in progress', u'suspended', u'DONE'])
+        entry_category.pack(fill=X, padx=5, expand=True)
 
-        self.entry_date_start = ttk.Entry(self)
-        self.entry_date_start.place(x=200, y=150)
+        frame_3 = Frame(self, bg="#e7e7de")
+        frame_3.pack(fill=X)
+        label_status = tk.Label(frame_3,
+                                  text='Статус:               ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_status.pack(side=LEFT, padx=5, pady=5)
 
-        self.entry_date_end = ttk.Entry(self)
-        self.entry_date_end.place(x=200, y=175)
+        entry_status = Entry(frame_3, justify="right")
+        entry_status.pack(fill=X, padx=5, expand=True)
 
-        # self.entry_status = ttk.Combobox(self, values=[u'есть', u'отсутсвует'])
-        # self.entry_status.current(0)
-        # self.entry_status.place(x=200, y=110)
+        frame_4 = Frame(self, bg="#e7e7de")
+        frame_4.pack(fill=X)
+        label_responsible = tk.Label(frame_4,
+                                  text='Ответственный:',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_responsible.pack(side=LEFT, padx=5, pady=5)
 
-        btn_cancel = ttk.Button(self, text='Закрыть', command=self.destroy)
-        btn_cancel.place(x=300, y=270)
+        entry_responsible = Entry(frame_4, justify="right")
+        entry_responsible.pack(fill=X, padx=5, expand=True)
 
-        self.btn_ok = ttk.Button(self, text='Добавить')
-        self.btn_ok.place(x=220, y=270)
-        self.btn_ok.bind('<Button-1>', lambda event: self.view.records(self.entry_task.get(),
-                                                                       self.entry_category.get(),
-                                                                       self.entry_status.get(),
-                                                                       self.entry_responsible.get(),
-                                                                       self.entry_date_start.get(),
-                                                                       self.entry_date_end.get()))
+        frame_5 = Frame(self, bg="#e7e7de")
+        frame_5.pack(fill=X)
+        label_date_start = tk.Label(frame_5,
+                                  text='Старт задачи:    ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_date_start.pack(side=LEFT, padx=5, pady=5)
+
+        entry_date_start = Entry(frame_5, justify="right")
+        entry_date_start.pack(fill=X, padx=5, expand=True)
+
+        frame_6 = Frame(self, bg="#e7e7de")
+        frame_6.pack(fill=X)
+        label_date_end = tk.Label(frame_6,
+                                  text='Срок до:             ',
+                                  bg="#e7e7de",
+                                  font='Times 15')
+        label_date_end.pack(side=LEFT, padx=5, pady=5)
+
+        entry_date_end = Entry(frame_6, justify="right")
+        entry_date_end.pack(fill=X, padx=5, expand=True)
+
+        frame_7 = Frame(self, bg="#e7e7de")
+        frame_7.pack(fill=X)
+
+
+        btn_cancel = tk.Button(frame_7,
+                               bg='#00587a',
+                               fg='#ffffff',
+                               text=' ЗАКРЫТЬ ',
+                               compound=tk.TOP,
+                               font='Times 13',
+                               command=self.destroy,
+                               width=20)
+        btn_cancel.pack(side=RIGHT, padx=5, pady=5)
+
+        self.btn_ok = tk.Button(frame_7,
+                                bg='#00587a',
+                                fg='#ffffff',
+                                text='ДОБАВИТЬ',
+                                compound=tk.TOP,
+                                font='Times 13',
+                                width=20)
+
+        self.btn_ok.pack(side=LEFT, padx=5, pady=5)
+        self.btn_ok.bind('<Button-1>', lambda event: self.view.records(entry_task.get(),
+                                                                       entry_category.get(),
+                                                                       entry_status.get(),
+                                                                       entry_responsible.get(),
+                                                                       entry_date_start.get(),
+                                                                       entry_date_end.get()))
 
         self.grab_set()
         self.focus_set()
+
+        frame_8 = Frame(self, bg="#e7e7de")
+        frame_8.pack(fill=X)
+
+        poetry = "Чтобы выполнить большой и важный труд,\n " \
+                 "необходимы две вещи: ясный план \n" \
+                 "и ограниченное время\n" \
+                 "© Хаббард Элберт"
+        label2 = tk.Label(frame_8,
+                          text=poetry,
+                          bg="#3d394d",
+                          fg="#ffb26b")
+        label2.pack(side=TOP)
 
 
 class Update(Task):
@@ -629,11 +857,9 @@ if __name__ == "__main__":
     """Запуск приложения"""
     db = DB()
     master = Tk()
-    # master.wm_state('zoomed')
-    # master.attributes("-topmost", True)
-    master.geometry("1200x650+100+100")
-    master.title("Простое меню")
-    master.config(bg="#e7e7de")
+    master.geometry("1400x650+100+100")
+    master.title("Задачи")
+    master.config(bg="#3d394d")
     app = AdminPanel(master)
     app.pack()
     master.mainloop()
