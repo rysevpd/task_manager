@@ -4,10 +4,11 @@ from tkinter import *
 from tkinter import ttk
 import sqlite3
 from database import DB
+from admin_panel import AdminPanel
 
-
-# https://colorhunt.co/palette/225739
-
+"""
+https://colorhunt.co/palette/225739
+"""
 
 class Main(tk.Frame):
     """Основное окно программы."""
@@ -39,7 +40,7 @@ class Main(tk.Frame):
         Dialog()
 
     def admin_menu(self):
-        AdminPanel()
+        AdminPanel.init_main
         print('efefeff')
 
     def avtorize(self, login, pas):
@@ -63,24 +64,25 @@ class Main(tk.Frame):
             print(c)
             if c == "[('admin',)]":
                 print(1)
-                self.admin_menu()
+                os.system('python admin_panel.py')
                 # os.system('python main.py')
             else:
                 # os.system('python main_1.py')
                 print(2)
 
-
+"""
 class AdminPanel(tk.Frame):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, root):
+        super().__init__(root)
         self.init_main()
         self.db = db
 
     def init_main(self):
+
         self.master = Tk()
         self.master.wm_state('zoomed')
         self.master.attributes("-topmost", True)
-        self.master.geometry("450x350+300+300")
+        self.master.geometry("600x450+300+300")
         self.master.title("Простое меню")
         self.master.config(bg="#e7e7de")
 
@@ -121,14 +123,53 @@ class AdminPanel(tk.Frame):
         menubar.add_cascade(label="Печать", menu=print_menu)
         menubar.add_command(label="Обновить" #command=self.view_records
                              )
-        frame_1 = LabelFrame(self.master, text="Верх", bg="#ffffff")
-        frame_1.pack(side=RIGHT, expand=1, fill=Y)
-        label_password = tk.Label(frame_1, text="пароль:", bg="#e7e7de", font='Times 15')
-        label_password.pack(side=TOP, padx=5, pady=1)
+        frame_1 = LabelFrame(self.master,
+                             text="Управление",
+                             bg="#008891")
+        frame_1.pack(side=RIGHT, padx=10, fill=Y)
+        # label_password = tk.Label(frame_1, text="пароль:", bg="#e7e7de", font='Times 15')
+        # label_password.pack(side=TOP, padx=30, pady=1)
+
+        update_data = tk.Button(frame_1,
+                                text='Редактировать',
+                                bg="#845ec2",
+                                bd=2,
+                                font='Times 15'  # command=self.open_update_dialog
+                                )
+        update_data.pack(side=TOP, padx=5, pady=5)
+
+        del_data = tk.Button(frame_1,
+                             text='     Удалить     ',
+                             bg="#845ec2",
+                             bd=2,
+                             font='Times 15')
+        del_data.pack(side=TOP, padx=5, pady=5)
+
+        del_data = tk.Button(frame_1,
+                             text='     Обновить   ',
+                             bg="#845ec2",
+                             bd=2,
+                             font='Times 15')
+        del_data.pack(side=TOP, padx=5, pady=5)
+
+        programmer = tk.Button(frame_1,
+                             text='О разработчике',
+                             bg="#845ec2",
+                             bd=2,
+                             font='Times 15')
+        programmer.pack(side=TOP, padx=5, pady=5)
+
+        exit_program = tk.Button(frame_1,
+                               text='      Выход      ',
+                               bg="#845ec2",
+                               bd=2,
+                               font='Times 15', command=root.destroy())
+        exit_program.pack(side=BOTTOM, padx=5, pady=5)
+
         self.master.mainloop()
+"""
 
-
-class Dialog(tk.Frame):
+class Dialog(tk.Toplevel):
 
     def __init__(self):
         super().__init__()
