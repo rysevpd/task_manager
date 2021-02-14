@@ -227,19 +227,42 @@ class ListUsers(tk.Toplevel):
 
     def init_list_users(self):
         self.title('Сотрудники')
-        self.geometry("950x450+300+200")
+        self.geometry("950x450+400+100")
         self.resizable(False, False)
 
-        update_data = tk.Button(self, text='Удалить сотрудника', bd=2, compound=tk.TOP,
-                                command=self.delete_users)
-        update_data.place(x=764, y=323)
+        frame_1 = Frame(self, bg="#3d394d")
+        frame_1.pack(side=BOTTOM, padx=2, fill=X)
 
-        btn_cancel = ttk.Button(self, text='Закрыть', command=self.destroy)
-        btn_cancel.place(x=759, y=400)
+        self.user_del = tk.Button(frame_1,
+                                  bg='#00587a',
+                                  fg='#ffffff',
+                                  text=' УДАЛИТЬ ',
+                                  compound=tk.TOP,
+                                  font='Times 13',
+                                  command=self.delete_users,
+                                  width=20)
+        self.user_del.pack(side=LEFT, padx=5, pady=5)
+
+        btn_cancel = tk.Button(frame_1,
+                               bg='#00587a',
+                               fg='#ffffff',
+                               text=' ЗАКРЫТЬ ',
+                               compound=tk.TOP,
+                               font='Times 13',
+                               command=self.destroy,
+                               width=20)
+        btn_cancel.pack(side=RIGHT, padx=5, pady=5)
+
+        frame_2 = LabelFrame(self,
+                             text="Сотрудники",
+                             bg="#3d394d",
+                             fg="#ffb26b",
+                             font="Times 15")
+        frame_2.pack(side=TOP, fill=BOTH, padx=5, pady=5)
 
         """Виджет tree - наша таблица"""
 
-        self.tree = ttk.Treeview(self, columns=('name', 'login', 'pas', 'role', 'post', 'number', 'address'),
+        self.tree = ttk.Treeview(frame_2, columns=('name', 'login', 'pas', 'role', 'post', 'number', 'address'),
                                  height=15, show='headings')
 
         self.tree.column('name', width=180, anchor=tk.CENTER)
@@ -259,6 +282,7 @@ class ListUsers(tk.Toplevel):
         self.tree.heading('address', text='Адрес')
 
         self.tree.pack()
+
 
     def view_users(self):
         self.db.c.execute('''SELECT * FROM users''')
@@ -401,59 +425,12 @@ class AddUser(tk.Toplevel):
         frame_9 = Frame(self, bg="#e7e7de")
         frame_9.pack(fill=X)
 
-
-
-        """
-        label_user = tk.Label(self, text='Сотрудник:')
-        label_user.place(x=50, y=50)
-        label_login = tk.Label(self, text='Логин:')
-        label_login.place(x=50, y=75)
-        label_pas = tk.Label(self, text='Пароль:')
-        label_pas.place(x=50, y=100)
-        label_role = tk.Label(self, text='Роль:')
-        label_role.place(x=50, y=125)
-        label_post = tk.Label(self, text='Должность:')
-        label_post.place(x=50, y=150)
-        label_number = tk.Label(self, text='Номер телефона:')
-        label_number.place(x=50, y=175)
-        label_address = tk.Label(self, text='Адрес:')
-        label_address.place(x=50, y=200)
-
-        self.entry_user = ttk.Entry(self)
-        self.entry_user.place(x=200, y=50)
-        self.entry_login = ttk.Entry(self)
-        self.entry_login.place(x=200, y=75)
-        self.entry_pas = ttk.Entry(self)
-        self.entry_pas.place(x=200, y=100)
-        self.entry_post = ttk.Entry(self)
-        self.entry_post.place(x=200, y=150)
-        self.entry_number = ttk.Entry(self)
-        self.entry_number.place(x=200, y=175)
-        self.entry_address = ttk.Entry(self)
-        self.entry_address.place(x=200, y=200)
-
-        self.entry_role = ttk.Combobox(self, values=[u'admin', u'user'])
-        self.entry_role.current(0)
-        self.entry_role.place(x=200, y=125)
-        """
-        """
-        btn_cancel = ttk.Button(self, text='Закрыть', command=self.destroy)
-        btn_cancel.place(x=300, y=225)
-
-        self.btn_ok = ttk.Button(self, text='Добавить')
-        self.btn_ok.place(x=220, y=225)
-        self.btn_ok.bind('<Button-1>', lambda event: self.view.record_user(self.entry_user.get(),
-                                                                           self.entry_login.get(),
-                                                                           self.entry_pas.get(),
-                                                                           self.entry_role.get(),
-                                                                           self.entry_post.get(),
-                                                                           self.entry_number.get(),
-                                                                           self.entry_address.get()))
-        self.btn_ok.bind('<Button-1>', lambda event: self.destroy(), add='+')
-
-        self.grab_set()
-        self.focus_set()
-        """
+        poetry = "Умеющий управлять другими силен,\n" \
+                 "но умеющий владеть собой ещё сильнее.\n" \
+                 "© Лао-Цзы"
+        label2 = tk.Label(frame_9, text=poetry,
+                          bg="#e7e7de")
+        label2.pack(padx=2, pady=7)
 
 class Category(tk.Toplevel):
     """Окно добавления категории"""
