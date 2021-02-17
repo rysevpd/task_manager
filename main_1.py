@@ -396,8 +396,14 @@ class Update(Task):
 
     def init_edit(self):
         self.title('Редактировать данные')
-        btn_edit = ttk.Button(self, text='Редактировать')
-        btn_edit.place(x=180, y=270)
+        btn_edit = tk.Button(self,
+                             text='Редактировать',
+                             bg='#3d84a8',
+                             fg='#bad7df',
+                             compound=tk.TOP,
+                             font='Times 13',
+                             width=20)
+        btn_edit.place(x=5, y=233)
         btn_edit.bind('<Button-1>', lambda event: self.view.update_record(self.entry_task.get(),
                                                                           self.entry_category.get(),
                                                                           self.entry_status.get(),

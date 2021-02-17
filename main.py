@@ -4,7 +4,6 @@ import sqlite3
 from tkinter import *
 
 
-
 class Main(tk.Frame):
     """Основное окно программы."""
 
@@ -82,7 +81,7 @@ class Main(tk.Frame):
         self.print_menu.add_command(label="Печать задач", command=self.print_data)
         self.print_menu.add_command(label="Печать пользователей", command=self.print_users)
 
-        self.main_menu.add_cascade(label="Фаил", menu=self.file_menu)
+        self.main_menu.add_cascade(label="Файл", menu=self.file_menu)
         self.main_menu.add_cascade(label="Поиск", menu=self.search_menu)
         self.main_menu.add_command(label="Помощь", command=self.open_help_dialog)
         self.main_menu.add_cascade(label="Печать", menu=self.print_menu)
@@ -607,8 +606,14 @@ class Update(Task):
 
     def init_edit(self):
         self.title('Редактировать данные')
-        btn_edit = ttk.Button(self, text='Редактировать')
-        btn_edit.place(x=180, y=270)
+        btn_edit = tk.Button(self,
+                             text='Редактировать',
+                             bg='#3d84a8',
+                             fg='#bad7df',
+                             compound=tk.TOP,
+                             font='Times 13',
+                             width=20)
+        btn_edit.place(x=5, y=233)
         btn_edit.bind('<Button-1>', lambda event: self.view.update_record(self.entry_task.get(),
                                                                           self.entry_category.get(),
                                                                           self.entry_status.get(),
@@ -884,7 +889,13 @@ class DB:
             number text,
             address text)''')
         self.conn.commit()
-
+        """
+        self.c.execute(
+            '''INSERT OR IGNORE INTO users(
+            name, login, pas, role, post, number, address)
+            VALUES ('admin', 'admin', 'admin', 'admin', 'admin', 'admin', 'admin')''')
+        self.conn.commit()
+        """
         self.c.execute(
             '''CREATE TABLE IF NOT EXISTS tasks(
             id integer primary key, 
